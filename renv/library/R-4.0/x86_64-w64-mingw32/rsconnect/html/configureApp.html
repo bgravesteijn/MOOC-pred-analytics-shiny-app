@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Configure an Application</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for configureApp {rsconnect}"><tr><td>configureApp {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Configure an Application</h2>
+
+<h3>Description</h3>
+
+<p>Configure an application running on a remote server.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+configureApp(
+  appName,
+  appDir = getwd(),
+  account = NULL,
+  server = NULL,
+  redeploy = TRUE,
+  size = NULL,
+  instances = NULL,
+  logLevel = c("normal", "quiet", "verbose")
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>appName</code></td>
+<td>
+<p>Name of application to configure</p>
+</td></tr>
+<tr valign="top"><td><code>appDir</code></td>
+<td>
+<p>Directory containing application. Defaults to
+current working directory.</p>
+</td></tr>
+<tr valign="top"><td><code>account, server</code></td>
+<td>
+<p>Uniquely identify a remote server with either your
+user <code>account</code>, the <code>server</code> name, or both. If neither are supplied, and
+there are multiple options, you'll be prompted to pick one.
+</p>
+<p>Use <code><a href="accounts.html">accounts()</a></code> to see the full list of available options.</p>
+</td></tr>
+<tr valign="top"><td><code>redeploy</code></td>
+<td>
+<p>Re-deploy application after its been configured.</p>
+</td></tr>
+<tr valign="top"><td><code>size</code></td>
+<td>
+<p>Configure application instance size</p>
+</td></tr>
+<tr valign="top"><td><code>instances</code></td>
+<td>
+<p>Configure number of application instances</p>
+</td></tr>
+<tr valign="top"><td><code>logLevel</code></td>
+<td>
+<p>One of <code>"quiet"</code>, <code>"normal"</code> or <code>"verbose"</code>; indicates how
+much logging to the console is to be performed. At <code>"quiet"</code> reports no
+information; at <code>"verbose"</code>, a full diagnostic log is captured.</p>
+</td></tr>
+</table>
+
+
+<h3>Note</h3>
+
+<p>This function works only for ShinyApps servers.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="applications.html">applications()</a></code>, <code><a href="deployApp.html">deployApp()</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+
+# set instance size for an application
+configureApp("myapp", size="xlarge")
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

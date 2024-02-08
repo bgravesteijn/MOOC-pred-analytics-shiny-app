@@ -1,0 +1,159 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Create a 'manifest.json'</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for writeManifest {rsconnect}"><tr><td>writeManifest {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Create a <code>manifest.json</code></h2>
+
+<h3>Description</h3>
+
+<p>Use <code>writeManifest()</code> to generate a <code>manifest.json</code>. Among other things,
+you can commit this file to git to activate
+<a href="https://docs.posit.co/connect/user/git-backed/">Git-Backed content</a>
+for Posit Connect.
+</p>
+<p><code>manifest.json</code> contains a list of all files in the app along with their
+dependencies, so you will need to re-run <code>writeManifest()</code> when either of
+these change.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+writeManifest(
+  appDir = getwd(),
+  appFiles = NULL,
+  appFileManifest = NULL,
+  appPrimaryDoc = NULL,
+  appMode = NULL,
+  contentCategory = NULL,
+  python = NULL,
+  forceGeneratePythonEnvironment = FALSE,
+  quarto = NA,
+  image = NULL,
+  envManagement = NULL,
+  envManagementR = NULL,
+  envManagementPy = NULL,
+  verbose = FALSE,
+  quiet = FALSE
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>appDir</code></td>
+<td>
+<p>A directory containing an application (e.g. a Shiny app
+or plumber API). Defaults to the current directory.</p>
+</td></tr>
+<tr valign="top"><td><code>appFiles, appFileManifest</code></td>
+<td>
+<p>Use <code>appFiles</code> to specify a
+character vector of files to bundle in the app or <code>appManifestFiles</code>
+to provide a path to a file containing a list of such files. If neither
+are supplied, will bundle all files in <code>appDir</code>, apart from standard
+exclusions and files listed in a <code>.rscignore</code> file. See
+<code><a href="listDeploymentFiles.html">listDeploymentFiles()</a></code> for more details.</p>
+</td></tr>
+<tr valign="top"><td><code>appPrimaryDoc</code></td>
+<td>
+<p>If the application contains more than one document, this
+parameter indicates the primary one, as a path relative to <code>appDir</code>. Can be
+<code>NULL</code>, in which case the primary document is inferred from the contents
+being deployed.</p>
+</td></tr>
+<tr valign="top"><td><code>appMode</code></td>
+<td>
+<p>Optional; the type of content being deployed.
+Provide this option when the inferred type of content is incorrect. This
+can happen, for example, when static HTML content includes a downloadable
+Shiny application <code>app.R</code>. Accepted values include <code>"shiny"</code>, <code>"api"</code>,
+<code>"rmd-static"</code>, <code>"rmd-shiny"</code>, <code>"quarto-static"</code>, <code>"quarto-shiny"</code>, and
+<code>"static"</code>. The Posit Connect API Reference contains a full set of
+available values. Not all servers support all types of content.</p>
+</td></tr>
+<tr valign="top"><td><code>contentCategory</code></td>
+<td>
+<p>Set this to <code>"site"</code> if you'd deploy with
+<code><a href="deploySite.html">deploySite()</a></code>; otherwise leave as is.</p>
+</td></tr>
+<tr valign="top"><td><code>python</code></td>
+<td>
+<p>Full path to a python binary for use by <code>reticulate</code>.
+Required if <code>reticulate</code> is a dependency of the app being deployed.
+If python = NULL, and RETICULATE_PYTHON or RETICULATE_PYTHON_FALLBACK is
+set in the environment, its value will be used. The specified python binary
+will be invoked to determine its version and to list the python packages
+installed in the environment.</p>
+</td></tr>
+<tr valign="top"><td><code>forceGeneratePythonEnvironment</code></td>
+<td>
+<p>Optional. If an existing
+<code>requirements.txt</code> file is found, it will be overwritten when this argument
+is <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>quarto</code></td>
+<td>
+<p>Should the deployed content be built by quarto?
+(<code>TRUE</code>, <code>FALSE</code>, or <code>NA</code>). The default, <code>NA</code>, will use quarto if
+there are <code>.qmd</code> files in the bundle, or if there is a
+<code style="white-space: pre;">_quarto.yml</code> and <code>.Rmd</code> files.
+</p>
+<p>(This option is ignored and quarto will always be used if the
+<code>metadata</code> contains <code>quarto_version</code> and <code>quarto_engines</code> fields.)</p>
+</td></tr>
+<tr valign="top"><td><code>image</code></td>
+<td>
+<p>Optional. The name of the image to use when building and
+executing this content. If none is provided, Posit Connect will
+attempt to choose an image based on the content requirements.</p>
+</td></tr>
+<tr valign="top"><td><code>envManagement</code></td>
+<td>
+<p>Optional. Should Posit Connect install R and Python
+packages for this content? (<code>TRUE</code>, <code>FALSE</code>, or <code>NULL</code>).
+The default, <code>NULL</code>, will not write any values to the bundle manifest,
+and Connect will fall back to the application default environment
+management strategy, or the server default if no application default
+is defined.
+</p>
+<p>(This option is a shorthand flag which overwrites the values of both
+<code>envManagementR</code> and <code>envManagementPy</code>.)</p>
+</td></tr>
+<tr valign="top"><td><code>envManagementR</code></td>
+<td>
+<p>Optional. Should Posit Connect install R packages
+for this content? (<code>TRUE</code>, <code>FALSE</code>, or <code>NULL</code>). The default, <code>NULL</code>, will
+not write any values to the bundle manifest, and Connect will fall back to
+the application default R environment management strategy, or the server
+default if no application default is defined.
+</p>
+<p>(This option is ignored when <code>envManagement</code> is non-<code>NULL</code>.)</p>
+</td></tr>
+<tr valign="top"><td><code>envManagementPy</code></td>
+<td>
+<p>Optional. Should Posit Connect install Python packages
+for this content? (<code>TRUE</code>, <code>FALSE</code>, or <code>NULL</code>). The default, <code>NULL</code>, will
+not write any values to the bundle manifest, and Connect will fall back to
+the application default Python environment management strategy, or the
+server default if no application default is defined.
+</p>
+<p>(This option is ignored when <code>envManagement</code> is non-<code>NULL</code>.)</p>
+</td></tr>
+<tr valign="top"><td><code>verbose</code></td>
+<td>
+<p>If <code>TRUE</code>, prints detailed progress messages.</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>If <code>FALSE</code>, prints progress messages.</p>
+</td></tr>
+</table>
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

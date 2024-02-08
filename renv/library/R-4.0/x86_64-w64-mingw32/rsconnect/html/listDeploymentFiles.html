@@ -1,0 +1,85 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Gather files to be bundled with an app</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for listDeploymentFiles {rsconnect}"><tr><td>listDeploymentFiles {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Gather files to be bundled with an app</h2>
+
+<h3>Description</h3>
+
+<p>Given an app directory, and optional <code>appFiles</code> and <code>appFileManifest</code>
+arguments, returns vector of paths to bundle in the app. (Note that
+documents follow a different strategy; see <code><a href="deployDoc.html">deployDoc()</a></code> for details.)
+</p>
+<p>When neither <code>appFiles</code> nor <code>appFileManifest</code> is supplied,
+<code>listDeploymentFiles()</code> will include all files under <code>appDir</code>, apart
+from the following:
+</p>
+
+<ul>
+<li><p> Certain files and folders that don't need to be bundled, such as
+version control directories, internal config files, and RStudio state,
+are automatically excluded.
+</p>
+</li>
+<li><p> You can exclude additional files by listing them in in a <code>.rscignore</code>
+file. This file must have one file or directory per line (with path
+relative to the current directory). It doesn't support wildcards, or
+ignoring files in subdirectories.
+</p>
+</li></ul>
+
+<p><code>listDeploymentFiles()</code> will throw an error if the total file size exceeds
+the maximum bundle size (as controlled by option <code>rsconnect.max.bundle.size</code>),
+or the number of files exceeds the maximum file limit (as controlled by
+option <code>rsconnect.max.bundle.files</code>). This prevents you from accidentally
+bundling a very large direcfory (i.e. you home directory).
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+listDeploymentFiles(
+  appDir,
+  appFiles = NULL,
+  appFileManifest = NULL,
+  error_call = caller_env()
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>appDir</code></td>
+<td>
+<p>A directory containing an application (e.g. a Shiny app
+or plumber API). Defaults to the current directory.</p>
+</td></tr>
+<tr valign="top"><td><code>appFiles, appFileManifest</code></td>
+<td>
+<p>Use <code>appFiles</code> to specify a
+character vector of files to bundle in the app or <code>appManifestFiles</code>
+to provide a path to a file containing a list of such files. If neither
+are supplied, will bundle all files in <code>appDir</code>, apart from standard
+exclusions and files listed in a <code>.rscignore</code> file. See
+<code><a href="listDeploymentFiles.html">listDeploymentFiles()</a></code> for more details.</p>
+</td></tr>
+<tr valign="top"><td><code>error_call</code></td>
+<td>
+<p>The call or environment for error reporting; expert
+use only.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Character of paths to bundle, relative to <code>appDir</code>.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

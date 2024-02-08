@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Server management</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for addServer {rsconnect}"><tr><td>addServer {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Server management</h2>
+
+<h3>Description</h3>
+
+<p>These functions manage the list of known servers:
+</p>
+
+<ul>
+<li> <p><code>addServer()</code> registers a Posit connect server. Once it has been
+registered, you can connect to an account on the server using
+<code><a href="connectApiUser.html">connectUser()</a></code>.
+</p>
+</li>
+<li> <p><code>removeServer()</code> removes a server from the registry.
+</p>
+</li>
+<li> <p><code>addServerCertificate()</code> adds a certificate to a server.
+</p>
+</li></ul>
+
+
+
+<h3>Usage</h3>
+
+<pre>
+addServer(url, name = NULL, certificate = NULL, validate = TRUE, quiet = FALSE)
+
+removeServer(name = NULL)
+
+addServerCertificate(name, certificate, quiet = FALSE)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>url</code></td>
+<td>
+<p>URL for the server. Can be a bare hostname like
+<code>connect.mycompany.com</code> or a url like <code style="white-space: pre;">http://posit.mycompany.com/connect</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>name</code></td>
+<td>
+<p>Server name. If omitted, the server hostname is used.</p>
+</td></tr>
+<tr valign="top"><td><code>certificate</code></td>
+<td>
+<p>Optional. Either a path to certificate file or a
+character vector containing the certificate's contents.</p>
+</td></tr>
+<tr valign="top"><td><code>validate</code></td>
+<td>
+<p>Validate that <code>url</code> actually points to a Posit Connect
+server?</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>Suppress output and prompts where possible.</p>
+</td></tr>
+</table>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+# register a local server
+addServer("http://myrsconnect/", "myserver")
+
+# list servers
+servers(local = TRUE)
+
+# connect to an account on the server
+connectUser(server = "myserver")
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

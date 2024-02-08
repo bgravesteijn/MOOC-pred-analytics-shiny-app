@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Maintain environment variables across multiple applications</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for listAccountEnvVars {rsconnect}"><tr><td>listAccountEnvVars {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Maintain environment variables across multiple applications</h2>
+
+<h3>Description</h3>
+
+
+<ul>
+<li> <p><code>listAccountEnvVars()</code> lists the environment variables used by
+every application published to the specified account.
+</p>
+</li>
+<li> <p><code>updateAccountEnvVars()</code> updates the specified environment variables with
+their current values for every app that uses them.
+</p>
+</li></ul>
+
+<p>Secure environment variable are currently only supported by Posit Connect
+so other server types will generate an error.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+listAccountEnvVars(server = NULL, account = NULL)
+
+updateAccountEnvVars(envVars, server = NULL, account = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>account, server</code></td>
+<td>
+<p>Uniquely identify a remote server with either your
+user <code>account</code>, the <code>server</code> name, or both. If neither are supplied, and
+there are multiple options, you'll be prompted to pick one.
+</p>
+<p>Use <code><a href="accounts.html">accounts()</a></code> to see the full list of available options.</p>
+</td></tr>
+<tr valign="top"><td><code>envVars</code></td>
+<td>
+<p>Names of environment variables to update. Their
+values will be automatically retrieved from the current process.
+</p>
+<p>If you specify multiple environment variables, any application that
+uses any of them will be updated with all of them.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code>listAccountEnvVars()</code> returns a data frame with one row
+for each data frame. It has variables <code>id</code>, <code>guid</code>, <code>name</code>, and
+<code>envVars</code>. <code>envVars</code> is a list-column.
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

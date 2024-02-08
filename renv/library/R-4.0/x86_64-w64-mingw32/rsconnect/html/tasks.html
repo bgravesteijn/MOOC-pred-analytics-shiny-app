@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: List Tasks</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for tasks {rsconnect}"><tr><td>tasks {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>List Tasks</h2>
+
+<h3>Description</h3>
+
+<p>List Tasks
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+tasks(account = NULL, server = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>account, server</code></td>
+<td>
+<p>Uniquely identify a remote server with either your
+user <code>account</code>, the <code>server</code> name, or both. If neither are supplied, and
+there are multiple options, you'll be prompted to pick one.
+</p>
+<p>Use <code><a href="accounts.html">accounts()</a></code> to see the full list of available options.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Returns a data frame with the following columns:
+</p>
+
+<table summary="Rd table">
+<tr>
+ <td style="text-align: left;">
+<code>id</code> </td><td style="text-align: left;"> Task id </td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+<code>action</code> </td><td style="text-align: left;"> Task action</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+<code>status</code> </td><td style="text-align: left;"> Current task status</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+<code>created_time</code> </td><td style="text-align: left;"> Task creation time</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+<code>finished_time</code> </td><td style="text-align: left;"> Task finished time</td>
+</tr>
+<tr>
+ <td style="text-align: left;">
+</td>
+</tr>
+
+</table>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="taskLog.html">taskLog()</a></code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+
+# list tasks for the default account
+tasks()
+
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "\n# This is the server logic for a Shiny web application.\n# You can find out more about building applications with Shiny here:\n#\n# http://shiny.rstudio.com\n#\n\nlibrary(shiny)\nlibrary(ggplot2)\n\nshinyServer(function(input, output) {\n  \n  output$distPlot <- renderPlot({\n\n    no_rx <- function(x){0.99-(0.99-0.90)*x}\n    rx    <- function(x){0.975-(0.975-0.93)*x}\n    \n    netharm    <- 0.015\n    netbenefit <- 0.030\n    test <- function(x){\n        itcpt <- 0.99-(netharm*input$fpr) \n        slope <- -(itcpt-(0.93-(netbenefit*input$fnr))) \n        res <- (itcpt+slope*x)-input$Toll\n        return(res)\n        }\n    \n    x_val <- seq(0,1, by=0.05)\n    plot.df <- expand.grid(x=x_val,\n                           y=NA,\n                           label=c(\"No PCI\", \"PCI\", \"Test\"))\n    plot.df$y[plot.df$label==\"No PCI\"] <- no_rx(x_val)\n    plot.df$y[plot.df$label==\"PCI\"] <- rx(x_val)\n    plot.df$y[plot.df$label==\"Test\"] <- test(x_val)\n    \n    ggplot(plot.df, aes(x=x, y=y, col=label))+\n      geom_line(cex=2)+\n      theme_bw()+\n      scale_color_discrete(\"Legend\")+\n      xlab(\"Risk of coronary artery disease\")+\n      ylab(\"10-year event free survival\")+\n      theme(text=element_text(size=16))\n\n    # # generate bins based on input$bins from ui.R\n    # x    <- faithful[, 2]\n    # bins <- seq(min(x), max(x), length.out = input$bins + 1)\n    # \n    # # draw the histogram with the specified number of bins\n    # hist(x, breaks = bins, col = 'darkgray', border = 'white')\n\n  })\n\n})\n",
+    "created" : 1560764252712.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3188759121",
+    "id" : "26122AA6",
+    "lastKnownWriteTime" : 1560771360,
+    "last_content_update" : 1560771360301,
+    "path" : "C:/Users/276018/Dropbox/Onderwijs/Leiden/Scripts/pred/module 1/decisionmaking_shinyapp/server.R",
+    "project_path" : "server.R",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

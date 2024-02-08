@@ -1,0 +1,11 @@
+name: pred_13_app
+title: Pred_1.3_app
+username:
+account: leidenphm
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 984329
+bundleId:
+url: https://leidenphm.shinyapps.io/pred_13_app/
+asMultiple: FALSE
+asStatic: FALSE

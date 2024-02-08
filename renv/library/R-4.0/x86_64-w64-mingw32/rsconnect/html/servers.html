@@ -1,0 +1,60 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Server metadata</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for servers {rsconnect}"><tr><td>servers {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Server metadata</h2>
+
+<h3>Description</h3>
+
+<p><code>servers()</code> lists all known servers; <code>serverInfo()</code> gets metadata about
+a specific server. Cloud servers <code>shinyapps.io</code> and <code>posit.cloud</code> are always
+automatically registered and available.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+servers(local = FALSE)
+
+serverInfo(name = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>local</code></td>
+<td>
+<p>Return only local servers? (i.e. not automatically registered
+cloud servers)</p>
+</td></tr>
+<tr valign="top"><td><code>name</code></td>
+<td>
+<p>Server name. If omitted, you'll be prompted to pick a server.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p><code>servers()</code> returns a data frame with registered server names and URLs.
+<code>serverInfo()</code> returns a list with details for a particular server.
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+# List all registered servers
+servers()
+
+# Get information about a server
+serverInfo("posit.cloud")
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

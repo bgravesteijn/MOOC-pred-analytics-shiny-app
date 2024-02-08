@@ -1,0 +1,202 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Detect application dependencies</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for appDependencies {rsconnect}"><tr><td>appDependencies {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Detect application dependencies</h2>
+
+<h3>Description</h3>
+
+<p><code>appDependencies()</code> recursively detects all R package dependencies for an
+application by parsing all <code>.R</code> and <code>.Rmd</code> files and looking for calls
+to <code>library()</code>, <code>require()</code>, <code>requireNamespace()</code>, <code>::</code>, and so on.
+It then adds implicit dependencies (i.e. an <code>.Rmd</code> requires Rmarkdown)
+and adds all recursive dependencies to create a complete manifest of
+package packages need to be installed to run the app.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+appDependencies(
+  appDir = getwd(),
+  appFiles = NULL,
+  appFileManifest = NULL,
+  appMode = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>appDir</code></td>
+<td>
+<p>A directory containing an application (e.g. a Shiny app
+or plumber API). Defaults to the current directory.</p>
+</td></tr>
+<tr valign="top"><td><code>appFiles, appFileManifest</code></td>
+<td>
+<p>Use <code>appFiles</code> to specify a
+character vector of files to bundle in the app or <code>appManifestFiles</code>
+to provide a path to a file containing a list of such files. If neither
+are supplied, will bundle all files in <code>appDir</code>, apart from standard
+exclusions and files listed in a <code>.rscignore</code> file. See
+<code><a href="listDeploymentFiles.html">listDeploymentFiles()</a></code> for more details.</p>
+</td></tr>
+<tr valign="top"><td><code>appMode</code></td>
+<td>
+<p>Optional; the type of content being deployed.
+Provide this option when the inferred type of content is incorrect. This
+can happen, for example, when static HTML content includes a downloadable
+Shiny application <code>app.R</code>. Accepted values include <code>"shiny"</code>, <code>"api"</code>,
+<code>"rmd-static"</code>, <code>"rmd-shiny"</code>, <code>"quarto-static"</code>, <code>"quarto-shiny"</code>, and
+<code>"static"</code>. The Posit Connect API Reference contains a full set of
+available values. Not all servers support all types of content.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>A data frame with one row for each dependency (direct, indirect,
+and inferred), and 4 columns:
+</p>
+
+<ul>
+<li> <p><code>Package</code>: package name.
+</p>
+</li>
+<li> <p><code>Version</code>: local version.
+</p>
+</li>
+<li> <p><code>Source</code>: a short string describing the source of the package install,
+as described above.
+</p>
+</li>
+<li> <p><code>Repository</code>: for CRAN and CRAN-like repositories, the URL to the
+repository. This will be ignored by the server if it has been configured
+with its own repository name -&gt; repository URL mapping.
+</p>
+</li></ul>
+
+
+
+<h3>Dependency discovery</h3>
+
+<p>rsconnect use one of three mechanisms to find which packages your application
+uses:
+</p>
+
+<ol>
+<li><p> If <code>renv.lock</code> is present, it will use the versions and sources defined in
+that file. If you're using the lockfile for some other purpose and
+don't want it to affect deployment, add <code>renv.lock</code> to <code>.rscignore</code>.
+</p>
+</li>
+<li><p> Otherwise, rsconnect will call <code>renv::snapshot()</code> to find all packages
+used by your code. If you'd instead prefer to only use the packages
+declared in a <code>DESCRIPTION</code> file, run
+<code>renv::settings$snapshot.type("explicit")</code> to activate renv's &quot;explicit&quot;
+mode.
+</p>
+</li>
+<li><p> Dependency resolution using renv is a new feature in rsconnect 1.0.0, and
+while we have done our best to test it, it still might fail for your app.
+If this happens, please <a href="https://github.com/rstudio/rsconnect/issues">file an issue</a>
+then set <code>options(rsconnect.packrat = TRUE)</code> to revert to the old
+dependency discovery mechanism.
+</p>
+</li></ol>
+
+
+
+<h3>Remote installation</h3>
+
+<p>When deployed, the app must first install all of these packages, and
+rsconnect ensures the versions used on the server will match the versions
+you used locally. It knows how to install packages from the following
+sources:
+</p>
+
+<ul>
+<li><p> CRAN and BioConductor (<code>Source: CRAN</code> or <code>Source: Bioconductor</code>). The
+remote server will ignore the specific CRAN or Bioconductor mirror that
+you use locally, always using the CRAN/BioC mirror that has been configured
+on the server.
+</p>
+</li>
+<li><p> Other CRAN like and CRAN-like repositories. These packages will have
+a <code>Source</code> determined by the value of <code>getOptions("repos")</code>. For example,
+if you've set the following options:
+</p>
+<div class="sourceCode R"><pre>options(
+   repos = c(
+     CRAN = "https://cran.rstudio.com/",
+     CORPORATE = "https://corporate-packages.development.company.com"
+   )
+)
+</pre></div>
+<p>Then packages installed from your corporate package repository will
+have source <code>CORPORATE</code>. Posit Connect
+<a href="https://docs.posit.co/connect/admin/appendix/configuration/#RPackageRepository">can be configured</a>
+to override their repository url so that (e.g.) you can use different
+packages versions on staging and production servers.
+</p>
+</li>
+<li><p> Packages installed from GitHub, GitLab, or BitBucket, have <code>Source</code>
+<code>github</code>, <code>gitlab</code>, and <code>bitbucket</code> respectively. When deployed, the
+bundle contains the additional metadata needed to precisely recreated
+the installed version.
+</p>
+</li></ul>
+
+<p>It's not possible to recreate the packages that you have built and installed
+from a directory on your local computer. This will have <code>Source: NA</code> and
+will cause the deployment to error. To resolve this issue, you'll need to
+install from one of the known sources described above.
+</p>
+
+
+<h3>Suggested packages</h3>
+
+<p>The <code>Suggests</code> field is not included when determining recursive dependencies,
+so it's possible that not every package required to run your application will
+be detected.
+</p>
+<p>For example, ggplot2's <code>geom_hex()</code> requires the hexbin package to be
+installed, but it is only suggested by ggplot2. So if your app uses
+<code>geom_hex()</code> it will fail, reporting that the hexbin package is not
+installed.
+</p>
+<p>You can overcome this problem with (e.g.) <code>requireNamespace(hexbin)</code>.
+This will tell rsconnect that your app needs the hexbin package, without
+otherwise affecting your code.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><a href="rsconnectPackages.html">rsconnectPackages</a>(Using Packages with rsconnect)
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+
+# dependencies for the app in the current working dir
+appDependencies()
+
+# dependencies for an app in another directory
+appDependencies("~/projects/shiny/app1")
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

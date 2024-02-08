@@ -1,0 +1,75 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Register account on Posit Connect</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for connectApiUser {rsconnect}"><tr><td>connectApiUser {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Register account on Posit Connect</h2>
+
+<h3>Description</h3>
+
+<p><code>connectUser()</code> and <code>connectApiUser()</code> connect your Posit Connect account to
+the rsconnect package so that it can deploy and manage applications on
+your behalf.
+</p>
+<p><code>connectUser()</code> is the easiest place to start because it allows you to
+authenticate in-browser to your Posit Connect server. <code>connectApiUser()</code> is
+appropriate for non-interactive settings; you'll need to copy-and-paste the
+API key from your account settings.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+connectApiUser(account = NULL, server = NULL, apiKey, quiet = FALSE)
+
+connectUser(
+  account = NULL,
+  server = NULL,
+  quiet = FALSE,
+  launch.browser = getOption("rsconnect.launch.browser", interactive())
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>account</code></td>
+<td>
+<p>A name for the account to connect.</p>
+</td></tr>
+<tr valign="top"><td><code>server</code></td>
+<td>
+<p>The server to connect to.</p>
+</td></tr>
+<tr valign="top"><td><code>apiKey</code></td>
+<td>
+<p>The API key used to authenticate the user</p>
+</td></tr>
+<tr valign="top"><td><code>quiet</code></td>
+<td>
+<p>Whether or not to show messages and prompts while connecting the
+account.</p>
+</td></tr>
+<tr valign="top"><td><code>launch.browser</code></td>
+<td>
+<p>If true, the system's default web browser will be
+launched automatically after the app is started. Defaults to <code>TRUE</code> in
+interactive sessions only. If a function is passed, it will be called
+after the app is started, with the app URL as a parameter.</p>
+</td></tr>
+</table>
+
+
+<h3>See Also</h3>
+
+<p>Other Account functions: 
+<code><a href="accounts.html">accounts</a>()</code>,
+<code><a href="setAccountInfo.html">setAccountInfo</a>()</code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

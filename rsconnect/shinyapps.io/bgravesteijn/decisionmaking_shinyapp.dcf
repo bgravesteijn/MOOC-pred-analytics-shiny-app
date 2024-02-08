@@ -1,0 +1,12 @@
+name: decisionmaking_shinyapp
+title: decisionmaking_shinyapp
+username: bgravesteijn
+account: bgravesteijn
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 11167303
+bundleId:
+url: https://bgravesteijn.shinyapps.io/decisionmaking_shinyapp/
+version: 1
+asMultiple: FALSE
+asStatic: FALSE

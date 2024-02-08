@@ -1,0 +1,377 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: Deploy an Application</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for deployApp {rsconnect}"><tr><td>deployApp {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>Deploy an Application</h2>
+
+<h3>Description</h3>
+
+<p>Deploy a <a href="../../shiny/html/shiny-package.html">shiny</a> application, an
+<a href="../../rmarkdown/html/rmarkdown-package.html">RMarkdown</a> document, a plumber API, or HTML
+content to a server.
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+deployApp(
+  appDir = getwd(),
+  appFiles = NULL,
+  appFileManifest = NULL,
+  appPrimaryDoc = NULL,
+  appSourceDoc = NULL,
+  appName = NULL,
+  appTitle = NULL,
+  envVars = NULL,
+  appId = NULL,
+  appMode = NULL,
+  contentCategory = NULL,
+  account = NULL,
+  server = NULL,
+  upload = TRUE,
+  recordDir = NULL,
+  launch.browser = getOption("rsconnect.launch.browser", is_interactive()),
+  on.failure = NULL,
+  logLevel = c("normal", "quiet", "verbose"),
+  lint = TRUE,
+  metadata = list(),
+  forceUpdate = NULL,
+  python = NULL,
+  forceGeneratePythonEnvironment = FALSE,
+  quarto = NA,
+  appVisibility = NULL,
+  image = NULL,
+  envManagement = NULL,
+  envManagementR = NULL,
+  envManagementPy = NULL,
+  space = NULL
+)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>appDir</code></td>
+<td>
+<p>A directory containing an application (e.g. a Shiny app
+or plumber API). Defaults to the current directory.</p>
+</td></tr>
+<tr valign="top"><td><code>appFiles, appFileManifest</code></td>
+<td>
+<p>Use <code>appFiles</code> to specify a
+character vector of files to bundle in the app or <code>appManifestFiles</code>
+to provide a path to a file containing a list of such files. If neither
+are supplied, will bundle all files in <code>appDir</code>, apart from standard
+exclusions and files listed in a <code>.rscignore</code> file. See
+<code><a href="listDeploymentFiles.html">listDeploymentFiles()</a></code> for more details.</p>
+</td></tr>
+<tr valign="top"><td><code>appPrimaryDoc</code></td>
+<td>
+<p>If the application contains more than one document, this
+parameter indicates the primary one, as a path relative to <code>appDir</code>. Can be
+<code>NULL</code>, in which case the primary document is inferred from the contents
+being deployed.</p>
+</td></tr>
+<tr valign="top"><td><code>appSourceDoc</code></td>
+<td>
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#deprecated"><img src="../help/figures/lifecycle-deprecated.svg" alt='[Deprecated]' /></a> Please use
+<code>recordDir</code> instead.</p>
+</td></tr>
+<tr valign="top"><td><code>appName</code></td>
+<td>
+<p>Application name, a string consisting of letters, numbers,
+<code style="white-space: pre;">_</code> and <code>-</code>. The application name is used to identify applications on a
+server, so must be unique.
+</p>
+<p>If not specified, the first deployment will be automatically it from the
+<code>appDir</code> for directory and website, and from the <code>appPrimaryDoc</code> for
+document. On subsequent deploys, it will use the previously stored value.</p>
+</td></tr>
+<tr valign="top"><td><code>appTitle</code></td>
+<td>
+<p>Free-form descriptive title of application. Optional; if
+supplied, will often be displayed in favor of the name. If ommitted,
+on second and subsequent deploys, the title will be unchanged.</p>
+</td></tr>
+<tr valign="top"><td><code>envVars</code></td>
+<td>
+<p>A character vector giving the names of environment variables
+whose values should be synchronised with the server (currently supported by
+Connect only). The values of the environment variables are sent over an
+encrypted connection and are not stored in the bundle, making this a safe
+way to send private data to Connect.
+</p>
+<p>The names (not values) are stored in the deployment record so that future
+deployments will automatically update their values. Other environment
+variables on the server will not be affected. This means that removing an
+environment variable from <code>envVars</code> will leave it unchanged on the server.
+To remove it, either delete it using the Connect UI, or temporarily unset
+it (with <code>Sys.unsetenv()</code> or similar) then re-deploy.
+</p>
+<p>Environment variables are set prior to deployment so that your code
+can use them and the first deployment can still succeed. Note that means
+that if the deployment fails, the values will still be updated.</p>
+</td></tr>
+<tr valign="top"><td><code>appId</code></td>
+<td>
+<p>Use this to deploy to an exact known application, ignoring all
+existing deployment records and <code>appName</code>.
+</p>
+<p>You can use this to update an existing application that is missing a
+deployment record. If you're re-deploying an application that you
+created it's generally easier to use <code>appName</code>; <code>appId</code> is best reserved
+for re-deploying apps created by someone else.
+</p>
+<p>You can find the <code>appId</code> in the following places:
+</p>
+
+<ul>
+<li><p> On shinyapps.io, it's the <code>id</code> listed on the applications page.
+</p>
+</li>
+<li><p> For Posit Connect, it's <code>guid</code> from the info tab on the content page.
+</p>
+</li></ul>
+</td></tr>
+<tr valign="top"><td><code>appMode</code></td>
+<td>
+<p>Optional; the type of content being deployed.
+Provide this option when the inferred type of content is incorrect. This
+can happen, for example, when static HTML content includes a downloadable
+Shiny application <code>app.R</code>. Accepted values include <code>"shiny"</code>, <code>"api"</code>,
+<code>"rmd-static"</code>, <code>"rmd-shiny"</code>, <code>"quarto-static"</code>, <code>"quarto-shiny"</code>, and
+<code>"static"</code>. The Posit Connect API Reference contains a full set of
+available values. Not all servers support all types of content.</p>
+</td></tr>
+<tr valign="top"><td><code>contentCategory</code></td>
+<td>
+<p>Optional; classifies the kind of content being
+deployed (e.g. <code>"plot"</code> or <code>"site"</code>).</p>
+</td></tr>
+<tr valign="top"><td><code>account, server</code></td>
+<td>
+<p>Uniquely identify a remote server with either your
+user <code>account</code>, the <code>server</code> name, or both. If neither are supplied, and
+there are multiple options, you'll be prompted to pick one.
+</p>
+<p>Use <code><a href="accounts.html">accounts()</a></code> to see the full list of available options.</p>
+</td></tr>
+<tr valign="top"><td><code>upload</code></td>
+<td>
+<p>If <code>TRUE</code> (the default) then the application is uploaded from
+the local system prior to deployment. If <code>FALSE</code> then it is re-deployed
+using the last version that was uploaded. <code>FALSE</code> is only supported on
+shinyapps.io; <code>TRUE</code> is required on Posit Connect.</p>
+</td></tr>
+<tr valign="top"><td><code>recordDir</code></td>
+<td>
+<p>Directory where deployment record is written. The default,
+<code>NULL</code>, uses <code>appDir</code>, since this is usually where you want the deployment
+data to be stored. This argument is typically only needed when deploying
+a directory of static files since you want to store the record with the
+code that generated those files, not the files themselves.</p>
+</td></tr>
+<tr valign="top"><td><code>launch.browser</code></td>
+<td>
+<p>If true, the system's default web browser will be
+launched automatically after the app is started. Defaults to <code>TRUE</code> in
+interactive sessions only. If a function is passed, it will be called
+after the app is started, with the app URL as a paramter.</p>
+</td></tr>
+<tr valign="top"><td><code>on.failure</code></td>
+<td>
+<p>Function to be called if the deployment fails. If a
+deployment log URL is available, it's passed as a parameter.</p>
+</td></tr>
+<tr valign="top"><td><code>logLevel</code></td>
+<td>
+<p>One of <code>"quiet"</code>, <code>"normal"</code> or <code>"verbose"</code>; indicates how
+much logging to the console is to be performed. At <code>"quiet"</code> reports no
+information; at <code>"verbose"</code>, a full diagnostic log is captured.</p>
+</td></tr>
+<tr valign="top"><td><code>lint</code></td>
+<td>
+<p>Lint the project before initiating deployment, to identify
+potentially problematic code?</p>
+</td></tr>
+<tr valign="top"><td><code>metadata</code></td>
+<td>
+<p>Additional metadata fields to save with the deployment
+record. These fields will be returned on subsequent calls to
+<code><a href="deployments.html">deployments()</a></code>.
+</p>
+<p>Multi-value fields are recorded as comma-separated values and returned in
+that form. Custom value serialization is the responsibility of the caller.</p>
+</td></tr>
+<tr valign="top"><td><code>forceUpdate</code></td>
+<td>
+<p>What should happen if there's no deployment record for
+the app, but there's an app with the same name on the server? If <code>TRUE</code>,
+will always update the previously-deployed app. If <code>FALSE</code>, will ask
+the user what to do, or fail if not in an interactive context.
+</p>
+<p>Defaults to <code>TRUE</code> when called automatically by the IDE, and <code>FALSE</code>
+otherwise. You can override the default by setting option
+<code>rsconnect.force.update.apps</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>python</code></td>
+<td>
+<p>Full path to a python binary for use by <code>reticulate</code>.
+Required if <code>reticulate</code> is a dependency of the app being deployed.
+If python = NULL, and RETICULATE_PYTHON or RETICULATE_PYTHON_FALLBACK is
+set in the environment, its value will be used. The specified python binary
+will be invoked to determine its version and to list the python packages
+installed in the environment.</p>
+</td></tr>
+<tr valign="top"><td><code>forceGeneratePythonEnvironment</code></td>
+<td>
+<p>Optional. If an existing
+<code>requirements.txt</code> file is found, it will be overwritten when this argument
+is <code>TRUE</code>.</p>
+</td></tr>
+<tr valign="top"><td><code>quarto</code></td>
+<td>
+<p>Should the deployed content be built by quarto?
+(<code>TRUE</code>, <code>FALSE</code>, or <code>NA</code>). The default, <code>NA</code>, will use quarto if
+there are <code>.qmd</code> files in the bundle, or if there is a
+<code style="white-space: pre;">_quarto.yml</code> and <code>.Rmd</code> files.
+</p>
+<p>(This option is ignored and quarto will always be used if the
+<code>metadata</code> contains <code>quarto_version</code> and <code>quarto_engines</code> fields.)</p>
+</td></tr>
+<tr valign="top"><td><code>appVisibility</code></td>
+<td>
+<p>One of <code>NULL</code>, <code>"private"</code>, or <code>"public"</code>; the
+visibility of the deployment. When <code>NULL</code>, no change to visibility is
+made. Currently has an effect only on deployments to shinyapps.io.</p>
+</td></tr>
+<tr valign="top"><td><code>image</code></td>
+<td>
+<p>Optional. The name of the image to use when building and
+executing this content. If none is provided, Posit Connect will
+attempt to choose an image based on the content requirements.</p>
+</td></tr>
+<tr valign="top"><td><code>envManagement</code></td>
+<td>
+<p>Optional. Should Posit Connect install R and Python
+packages for this content? (<code>TRUE</code>, <code>FALSE</code>, or <code>NULL</code>).
+The default, <code>NULL</code>, will not write any values to the bundle manifest,
+and Connect will fall back to the application default environment
+management strategy, or the server default if no application default
+is defined.
+</p>
+<p>(This option is a shorthand flag which overwrites the values of both
+<code>envManagementR</code> and <code>envManagementPy</code>.)</p>
+</td></tr>
+<tr valign="top"><td><code>envManagementR</code></td>
+<td>
+<p>Optional. Should Posit Connect install R packages
+for this content? (<code>TRUE</code>, <code>FALSE</code>, or <code>NULL</code>). The default, <code>NULL</code>, will
+not write any values to the bundle manifest, and Connect will fall back to
+the application default R environment management strategy, or the server
+default if no application default is defined.
+</p>
+<p>(This option is ignored when <code>envManagement</code> is non-<code>NULL</code>.)</p>
+</td></tr>
+<tr valign="top"><td><code>envManagementPy</code></td>
+<td>
+<p>Optional. Should Posit Connect install Python packages
+for this content? (<code>TRUE</code>, <code>FALSE</code>, or <code>NULL</code>). The default, <code>NULL</code>, will
+not write any values to the bundle manifest, and Connect will fall back to
+the application default Python environment management strategy, or the
+server default if no application default is defined.
+</p>
+<p>(This option is ignored when <code>envManagement</code> is non-<code>NULL</code>.)</p>
+</td></tr>
+<tr valign="top"><td><code>space</code></td>
+<td>
+<p>Optional. For Posit Cloud, the id of the space where the content
+should be deployed. If none is provided, content will be deployed to the
+deploying user's workspace or deployed to the same space in case of
+redeploy.</p>
+</td></tr>
+</table>
+
+
+<h3>Details</h3>
+
+
+
+<h4>Deployment records</h4>
+
+<p>When deploying an app, <code>deployApp()</code> will save a deployment record that
+makes it easy to update the app on server from your local source code. This
+generally means that you need to only need to supply important arguments
+(e.g. <code>appName</code>, <code>appTitle</code>, <code>server</code>/<code>account</code>) on the first deploy, and
+rsconnect will reuse the same settings on subsequent deploys.
+</p>
+<p>The metadata needs to make this work is stored in <code style="white-space: pre;">{appDir}/rsconnect/</code>.
+You should generally check these files into version control to ensure that
+future you and other collaborators will publish to the same location.
+</p>
+<p>If you have lost this directory, all is not lost, as <code>deployApp()</code> will
+attempt to rediscover existing deployments. This is easiest if you are
+updating an app that you created, as you can just supply the <code>appName</code>
+(and <code>server</code>/<code>account</code> if you have multiple accounts) and <code>deployApp()</code>
+will find the existing application account. If you need to update an app
+that was created by someone else (that you have write permission) for, you'll
+instead need to supply the <code>appId</code>.
+</p>
+
+
+
+<h3>See Also</h3>
+
+<p><code><a href="applications.html">applications()</a></code>, <code><a href="terminateApp.html">terminateApp()</a></code>, and <code><a href="restartApp.html">restartApp()</a></code>
+</p>
+<p>Other Deployment functions: 
+<code><a href="applications.html">applications</a>()</code>,
+<code><a href="deployAPI.html">deployAPI</a>()</code>,
+<code><a href="deployDoc.html">deployDoc</a>()</code>,
+<code><a href="deploySite.html">deploySite</a>()</code>,
+<code><a href="deployTFModel.html">deployTFModel</a>()</code>
+</p>
+
+
+<h3>Examples</h3>
+
+<pre>
+## Not run: 
+
+# deploy the application in the current working dir
+deployApp()
+
+# deploy an application in another directory
+deployApp("~/projects/shiny/app1")
+
+# deploy using an alternative application name and title
+deployApp("~/projects/shiny/app1", appName = "myapp",
+          appTitle = "My Application")
+
+# deploy specifying an explicit account name, then
+# redeploy with no arguments (will automatically use
+# the previously specified account)
+deployApp(account = "jsmith")
+deployApp()
+
+# deploy but don't launch a browser when completed
+deployApp(launch.browser = FALSE)
+
+# deploy a Quarto website, using the quarto package to
+# find the Quarto binary
+deployApp("~/projects/quarto/site1")
+
+# deploy application with environment variables
+# (e.g., `SECRET_PASSWORD=XYZ` is set via an ~/.Renviron file)
+rsconnect::deployApp(envVars = c("SECRET_PASSWORD"))
+
+## End(Not run)
+</pre>
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

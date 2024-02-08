@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: List authorized users for an application</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for showUsers {rsconnect}"><tr><td>showUsers {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>List authorized users for an application</h2>
+
+<h3>Description</h3>
+
+<p>List authorized users for an application
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+showUsers(appDir = getwd(), appName = NULL, account = NULL, server = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>appDir</code></td>
+<td>
+<p>Directory containing application. Defaults to
+current working directory.</p>
+</td></tr>
+<tr valign="top"><td><code>appName</code></td>
+<td>
+<p>Name of application.</p>
+</td></tr>
+<tr valign="top"><td><code>account, server</code></td>
+<td>
+<p>Uniquely identify a remote server with either your
+user <code>account</code>, the <code>server</code> name, or both. If neither are supplied, and
+there are multiple options, you'll be prompted to pick one.
+</p>
+<p>Use <code><a href="accounts.html">accounts()</a></code> to see the full list of available options.</p>
+</td></tr>
+</table>
+
+
+<h3>Note</h3>
+
+<p>This function works only for ShinyApps servers.
+</p>
+
+
+<h3>See Also</h3>
+
+<p><code><a href="addAuthorizedUser.html">addAuthorizedUser()</a></code> and <code><a href="showInvited.html">showInvited()</a></code>
+</p>
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml"><head><title>R: List Files to be Bundled</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="R.css" />
+</head><body>
+
+<table width="100%" summary="page for listBundleFiles {rsconnect}"><tr><td>listBundleFiles {rsconnect}</td><td style="text-align: right;">R Documentation</td></tr></table>
+
+<h2>List Files to be Bundled</h2>
+
+<h3>Description</h3>
+
+<p><a href="https://lifecycle.r-lib.org/articles/stages.html#superseded"><img src="../help/figures/lifecycle-superseded.svg" alt='[Superseded]' /></a>
+</p>
+<p><code>listBundleFiles()</code> has been superseded in favour of <code><a href="listDeploymentFiles.html">listDeploymentFiles()</a></code>.
+</p>
+<p>Given a directory containing an application, returns the names of the files
+that by default will be bundled in the application. It works similarly to
+a recursive directory listing from <code><a href="../../base/html/list.files.html">list.files()</a></code> but enforces bundle sizes
+as described in <code><a href="listDeploymentFiles.html">listDeploymentFiles()</a></code>
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+listBundleFiles(appDir)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>appDir</code></td>
+<td>
+<p>Directory containing the application.</p>
+</td></tr>
+</table>
+
+
+<h3>Value</h3>
+
+<p>Returns a list containing the following elements:
+</p>
+
+<ul>
+<li> <p><code>totalFiles</code>: Total number of files.
+</p>
+</li>
+<li> <p><code>totalSize</code>: Total size of the files (in bytes).
+</p>
+</li>
+<li> <p><code>contents</code>: Paths to bundle, relative to <code>appDir</code>.
+</p>
+</li></ul>
+
+
+<hr /><div style="text-align: center;">[Package <em>rsconnect</em> version 1.2.1 <a href="00Index.html">Index</a>]</div>
+</body></html>
